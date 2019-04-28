@@ -43,5 +43,4 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Cafe/ErrorHandling/Config/ErrorHandlin
     DESTINATION include/Cafe/ErrorHandling/Config)
 
 install(EXPORT ErrorHandling
-    NAMESPACE Cafe.
     DESTINATION cmake/ErrorHandling)
