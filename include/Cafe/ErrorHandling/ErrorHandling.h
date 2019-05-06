@@ -1,5 +1,6 @@
 #pragma once
 #include <Cafe/Encoding/CodePage/UTF-8.h>
+#include <Cafe/Misc/Export.h>
 #include <Cafe/Misc/Utility.h>
 #include <Cafe/Misc/UtilityMacros.h>
 #include <exception>
@@ -14,7 +15,7 @@
 
 namespace Cafe::ErrorHandling
 {
-	class CafeException : public std::exception
+	class CAFE_PUBLIC CafeException : public std::exception
 	{
 	public:
 		struct Context
@@ -41,14 +42,14 @@ namespace Cafe::ErrorHandling
 		Context const& GetContext() const noexcept;
 
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
-		StackWalker::CaptureResult const& GetFrames() const noexcept;
+		std::shared_ptr<StackWalker::CaptureResult> const& GetFrames() const noexcept;
 #endif
 
 	private:
 		Context m_Context;
 		std::shared_ptr<Encoding::String<Encoding::CodePage::Utf8>> m_Description;
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
-		StackWalker::CaptureResult m_CaptureResult;
+		std::shared_ptr<StackWalker::CaptureResult> m_CaptureResult;
 #endif
 	};
 } // namespace Cafe::ErrorHandling

@@ -14,7 +14,7 @@ using namespace ErrorHandling;
 namespace
 {
 	std::once_flag s_SymInitFlag{};
-	void SymInit()
+	CAFE_LOCAL void SymInit()
 	{
 		std::call_once(s_SymInitFlag, [] {
 			SymSetOptions(SYMOPT_LOAD_LINES);

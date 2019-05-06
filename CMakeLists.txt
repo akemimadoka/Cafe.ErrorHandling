@@ -2,10 +2,14 @@ set(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER OFF CACHE BOOL "Include stack walker
 set(CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION OFF CACHE BOOL
     "Enable stack walker in Cafe::Exception, available only if CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER is enabled")
 
+configure_file(cmake/ErrorHandlingConfig.h.in Cafe/ErrorHandling/Config/ErrorHandlingConfig.h)
+
 set(SOURCE_FILES
+    src/CommonExceptions.cpp
     src/ErrorHandling.cpp)
 
 set(HEADERS
+    include/Cafe/ErrorHandling/CommonExceptions.h
     include/Cafe/ErrorHandling/ErrorHandling.h)
 
 if(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER)
@@ -13,19 +17,19 @@ if(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER)
     list(APPEND HEADERS include/Cafe/ErrorHandling/StackWalker.h)
 endif()
 
-add_library(Cafe.ErrorHandling ${SOURCE_FILES} ${HEADERS})
-
-configure_file(cmake/ErrorHandlingConfig.h.in Cafe/ErrorHandling/Config/ErrorHandlingConfig.h)
+add_library(Cafe.ErrorHandling ${SOURCE_FILES} ${HEADERS}
+    ${CMAKE_CURRENT_BINARY_DIR}/Cafe/ErrorHandling/Config/ErrorHandlingConfig.h)
 
 target_include_directories(Cafe.ErrorHandling PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(Cafe.ErrorHandling PUBLIC Cafe.Encoding.UTF-8)
+target_link_libraries(Cafe.ErrorHandling
+    PUBLIC Cafe.Encoding.UTF-8
+    PRIVATE Cafe.TextUtils.Misc)
 
 if(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER)
-    target_link_libraries(Cafe.ErrorHandling PRIVATE Cafe.TextUtils.Misc)
     if(CMAKE_SYSTEM_NAME MATCHES "Windows")
         message(STATUS "Including stack walker introduces dependency of DbgHelp.lib")
         target_link_libraries(Cafe.ErrorHandling PRIVATE DbgHelp.lib)

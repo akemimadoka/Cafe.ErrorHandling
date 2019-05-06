@@ -20,7 +20,7 @@ CafeException::CafeException(
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
 , m_CaptureResult
 {
-	StackWalker::Capture()
+	std::make_shared<StackWalker::CaptureResult>(StackWalker::Capture())
 }
 #endif
 {
@@ -41,7 +41,7 @@ CafeException::Context const& CafeException::GetContext() const noexcept
 }
 
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
-StackWalker::CaptureResult const& CafeException::GetFrames() const noexcept
+std::shared_ptr<StackWalker::CaptureResult> const& CafeException::GetFrames() const noexcept
 {
 	return m_CaptureResult;
 }
