@@ -1,6 +1,6 @@
 set(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER OFF CACHE BOOL "Include stack walker in Cafe.ErrorHandling")
-set(CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION OFF CACHE BOOL
-    "Enable stack walker in Cafe::Exception, available only if CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER is enabled")
+set(CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION ON CACHE BOOL
+    "Enable stack walker in Cafe::ErrorHandling::CafeException, available only if CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER is enabled")
 
 configure_file(cmake/ErrorHandlingConfig.h.in Cafe/ErrorHandling/Config/ErrorHandlingConfig.h)
 
