@@ -5,16 +5,16 @@ set(CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION ON CACHE BOOL
 configure_file(cmake/ErrorHandlingConfig.h.in Cafe/ErrorHandling/Config/ErrorHandlingConfig.h)
 
 set(SOURCE_FILES
-    src/CommonExceptions.cpp
-    src/ErrorHandling.cpp)
+    src/Cafe/ErrorHandling/CommonExceptions.cpp
+    src/Cafe/ErrorHandling/ErrorHandling.cpp)
 
 set(HEADERS
-    include/Cafe/ErrorHandling/CommonExceptions.h
-    include/Cafe/ErrorHandling/ErrorHandling.h)
+    src/Cafe/ErrorHandling/CommonExceptions.h
+    src/Cafe/ErrorHandling/ErrorHandling.h)
 
 if(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER)
-    list(APPEND SOURCE_FILES src/StackWalker.cpp)
-    list(APPEND HEADERS include/Cafe/ErrorHandling/StackWalker.h)
+    list(APPEND SOURCE_FILES src/Cafe/ErrorHandling/StackWalker.cpp)
+    list(APPEND HEADERS src/Cafe/ErrorHandling/StackWalker.h)
 endif()
 
 add_library(Cafe.ErrorHandling ${SOURCE_FILES} ${HEADERS}
@@ -22,7 +22,7 @@ add_library(Cafe.ErrorHandling ${SOURCE_FILES} ${HEADERS}
 
 target_include_directories(Cafe.ErrorHandling PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(Cafe.ErrorHandling
@@ -39,7 +39,7 @@ endif()
 install(TARGETS Cafe.ErrorHandling
     EXPORT ErrorHandling)
 
-install(DIRECTORY include/
+install(DIRECTORY src/
     TYPE INCLUDE
     FILES_MATCHING PATTERN "*.h")
 
