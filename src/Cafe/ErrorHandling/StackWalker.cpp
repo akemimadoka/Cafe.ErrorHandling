@@ -36,11 +36,10 @@ StackWalker::Capture(std::size_t captureFrames, std::size_t skipFrames,
 #	if WINVER <= _WIN32_WINNT_WS03
 	if (captureFrames >= 63 || skipFrames >= 63 - captureFrames)
 	{
-		CAFE_THROW(
-		    CafeException,
-		    CAFE_UTF8_SV(
-		        "captureFrames or skipFrames is too large for Windows Server 2003 / Windows XP, see "
-		        "https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633(v=vs.85).aspx ."));
+		CAFE_THROW(CafeException, CAFE_UTF8_SV("captureFrames or skipFrames is too large for "
+		                                       "Windows Server 2003 / Windows XP, see "
+		                                       "https://msdn.microsoft.com/en-us/library/windows/"
+		                                       "desktop/bb204633(v=vs.85).aspx ."));
 	}
 #	endif
 
@@ -75,11 +74,12 @@ StackWalker::Capture(std::size_t captureFrames, std::size_t skipFrames,
 	{
 		const auto address = s_Stack[i];
 		const auto [symbolName, symbolAddress] = [&] {
-			if (SymFromAddr(hProcess, reinterpret_cast<DWORD64>(address), nullptr, &symbol.SymbolInfo))
+			if (SymFromAddr(hProcess, reinterpret_cast<DWORD64>(address), nullptr,
+			                &symbol.SymbolInfo))
 			{
 				return std::pair{ Cafe::TextUtils::EncodeFromNarrow<Cafe::Encoding::CodePage::Utf8>(
-					                    { symbol.SymbolInfo.Name, symbol.SymbolInfo.NameLen }),
-					                symbol.SymbolInfo.Address };
+					                  { symbol.SymbolInfo.Name, symbol.SymbolInfo.NameLen }),
+					              symbol.SymbolInfo.Address };
 			}
 
 			return std::pair{ unknownSymbolName.ToString(), SymbolAddressType{} };
@@ -89,13 +89,15 @@ StackWalker::Capture(std::size_t captureFrames, std::size_t skipFrames,
 			if (SymGetLineFromAddr64(hProcess, reinterpret_cast<DWORD64>(s_Stack[i]), &displacement,
 			                         &line))
 			{
-				return std::tuple{ Cafe::TextUtils::EncodeFromNarrow<Cafe::Encoding::CodePage::Utf8>(
-					                     { line.FileName }),
-					                 line.Address, line.LineNumber };
+				return std::tuple{
+					Cafe::TextUtils::EncodeFromNarrow<Cafe::Encoding::CodePage::Utf8>(
+					    { line.FileName }),
+					line.Address, line.LineNumber
+				};
 			}
 
 			return std::tuple{ unknownFileName.ToString(), SourceFileAddressType{},
-				                 SourceFileLineNumberType{} };
+				               SourceFileLineNumberType{} };
 		}();
 
 		result.Frames.push_back({ s_Stack[i], std::move(symbolName), symbolAddress,
@@ -119,8 +121,9 @@ StackWalker::Capture(std::size_t captureFrames,
 	{
 		const auto symInfo = symbolInfo[i];
 		result.Frames.push_back(
-		    { s_Stack[i], symInfo ? Cafe::TextUtils::EncodeFromNarrow<Encoding::CodePage::Utf8>(symInfo)
-		                          : unknownDescription.ToString() });
+		    { s_Stack[i], symInfo
+		                      ? Cafe::TextUtils::EncodeFromNarrow<Encoding::CodePage::Utf8>(symInfo)
+		                      : unknownDescription.ToString() });
 	}
 	return result;
 }

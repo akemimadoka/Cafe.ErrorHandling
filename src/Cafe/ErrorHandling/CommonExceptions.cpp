@@ -55,12 +55,14 @@ Encoding::StringView<Encoding::CodePage::Utf8> SystemException::GetErrorMessage(
 				LocalFree(errMsg);
 			};
 
-			m_ErrorMessage.Assign(
-			    TextUtils::EncodeFromWide<Encoding::CodePage::Utf8>(static_cast<const wchar_t*>(errMsg)).GetView());
+			m_ErrorMessage.Assign(TextUtils::EncodeFromWide<Encoding::CodePage::Utf8>(
+			                          static_cast<const wchar_t*>(errMsg))
+			                          .GetView());
 		}
 #else
 		const auto errMsg = std::strerror(m_ErrorCode);
-		m_ErrorMessage.Assign(TextUtils::EncodeFromNarrow<Encoding::CodePage::Utf8>(errMsg).GetView());
+		m_ErrorMessage.Assign(
+		    TextUtils::EncodeFromNarrow<Encoding::CodePage::Utf8>(errMsg).GetView());
 #endif
 	}
 

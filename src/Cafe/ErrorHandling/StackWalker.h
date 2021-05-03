@@ -70,9 +70,9 @@ namespace Cafe::ErrorHandling::StackWalker
 	    Encoding::StringView<Encoding::CodePage::Utf8> unknownSymbolName = CAFE_UTF8_SV("Unknown"),
 	    Encoding::StringView<Encoding::CodePage::Utf8> unknownFileName = CAFE_UTF8_SV("Unknown"));
 #	else
-	CAFE_PUBLIC CaptureResult Capture(
-	    std::size_t captureFrames = MaxCaptureFrames,
-	    Encoding::StringView<Encoding::CodePage::Utf8> unknownDescription = CAFE_UTF8_SV("Unknown"));
+	CAFE_PUBLIC CaptureResult Capture(std::size_t captureFrames = MaxCaptureFrames,
+	                                  Encoding::StringView<Encoding::CodePage::Utf8>
+	                                      unknownDescription = CAFE_UTF8_SV("Unknown"));
 #	endif
 } // namespace Cafe::ErrorHandling::StackWalker
 

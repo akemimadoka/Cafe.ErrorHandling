@@ -26,8 +26,9 @@ namespace Cafe::ErrorHandling
 		};
 
 		CafeException(Context context, Encoding::String<Encoding::CodePage::Utf8> description);
-		CafeException(Context context,
-		              std::shared_ptr<Encoding::String<Encoding::CodePage::Utf8>> description) noexcept;
+		CafeException(
+		    Context context,
+		    std::shared_ptr<Encoding::String<Encoding::CodePage::Utf8>> description) noexcept;
 
 		CafeException(CafeException const&) noexcept = default;
 		CafeException(CafeException&&) noexcept = default;
@@ -58,9 +59,9 @@ namespace Cafe::ErrorHandling
 	throw exceptionClass({ __FILE__, __LINE__, __func__ }, __VA_ARGS__)
 
 #define CAFE_DEFINE_GENERAL_EXCEPTION(name, ...)                                                   \
-	class name : public CAFE_EXPAND_OR(::Cafe::ErrorHandling::CafeException, __VA_ARGS__)            \
-	{                                                                                                \
-	public:                                                                                          \
-		using BaseException = CAFE_EXPAND_OR(::Cafe::ErrorHandling::CafeException, __VA_ARGS__);       \
-		using BaseException::BaseException;                                                            \
+	class name : public CAFE_EXPAND_OR(::Cafe::ErrorHandling::CafeException, __VA_ARGS__)          \
+	{                                                                                              \
+	public:                                                                                        \
+		using BaseException = CAFE_EXPAND_OR(::Cafe::ErrorHandling::CafeException, __VA_ARGS__);   \
+		using BaseException::BaseException;                                                        \
 	}
