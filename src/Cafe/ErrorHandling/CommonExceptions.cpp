@@ -1,6 +1,5 @@
 #include <Cafe/ErrorHandling/CommonExceptions.h>
 #include <Cafe/Misc/Scope.h>
-#include <Cafe/TextUtils/Misc.h>
 #include <cstring>
 
 #if defined(_WIN32)
@@ -43,26 +42,42 @@ Encoding::StringView<Encoding::CodePage::Utf8> SystemException::GetErrorMessage(
 	if (m_ErrorMessage.IsEmpty())
 	{
 #if defined(_WIN32)
-		LPVOID errMsg = nullptr;
-		FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-		                   FORMAT_MESSAGE_IGNORE_INSERTS,
-		               NULL, m_ErrorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		               reinterpret_cast<LPWSTR>(&errMsg), 0, nullptr);
-		if (errMsg)
+		do
 		{
-			CAFE_SCOPE_EXIT
+			LPWSTR errMsg = nullptr;
+			FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+			                   FORMAT_MESSAGE_IGNORE_INSERTS,
+			               NULL, m_ErrorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			               reinterpret_cast<LPWSTR>(&errMsg), 0, NULL);
+			if (errMsg)
 			{
-				LocalFree(errMsg);
-			};
+				CAFE_SCOPE_EXIT
+				{
+					LocalFree(errMsg);
+				};
 
-			m_ErrorMessage.Assign(TextUtils::EncodeFromWide<Encoding::CodePage::Utf8>(
-			                          static_cast<const wchar_t*>(errMsg))
-			                          .GetView());
-		}
+				const char8_t* resultErrMsg;
+				const auto neededCount =
+				    WideCharToMultiByte(CP_UTF8, 0, errMsg, -1, NULL, 0, NULL, FALSE);
+				if (neededCount)
+				{
+					m_ErrorMessage.Resize(neededCount);
+					const auto succeed = WideCharToMultiByte(
+					    CP_UTF8, 0, errMsg, -1, reinterpret_cast<LPSTR>(m_ErrorMessage.GetData()),
+					    neededCount, NULL, FALSE);
+					if (succeed)
+					{
+						break;
+					}
+				}
+
+				m_ErrorMessage.Assign(CAFE_UTF8_SV("(Unknown error, converting failed)"));
+			}
+		} while (false);
 #else
 		const auto errMsg = std::strerror(m_ErrorCode);
 		m_ErrorMessage.Assign(
-		    TextUtils::EncodeFromNarrow<Encoding::CodePage::Utf8>(errMsg).GetView());
+		    std::span(reinterpret_cast<const char8_t*>(errMsg), std::strlen(errMsg)));
 #endif
 	}
 
