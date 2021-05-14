@@ -25,6 +25,7 @@ class CafeErrorHandlingConan(ConanFile):
     default_options = {opt[0]: opt[2] for opt in Options}
 
     requires = "Cafe.Encoding/0.1"
+    python_requires = "CafeCommon/0.1"
 
     generators = "cmake"
 
@@ -52,6 +53,7 @@ class CafeErrorHandlingConan(ConanFile):
             cmake.install()
 
     def package_info(self):
+        self.python_requires["CafeCommon"].module.addCafeSharedCompileOptions(self)
         self.cpp_info.libs = ["Cafe.ErrorHandling"]
         if self.options.CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER and self.settings.os == "Windows":
             self.cpp_info.libs.append("DbgHelp.lib")

@@ -41,6 +41,8 @@ target_include_directories(Cafe.ErrorHandling PUBLIC
 target_link_libraries(Cafe.ErrorHandling
     PUBLIC CONAN_PKG::Cafe.Encoding)
 
+AddCafeSharedFlags(Cafe.ErrorHandling)
+
 if(CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER)
     if(CMAKE_SYSTEM_NAME MATCHES "Windows")
         message(STATUS "Including stack walker introduces dependency of DbgHelp.lib")
