@@ -57,3 +57,5 @@ class CafeErrorHandlingConan(ConanFile):
         self.cpp_info.libs = ["Cafe.ErrorHandling"]
         if self.options.CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER and self.settings.os == "Windows":
             self.cpp_info.libs.append("DbgHelp.lib")
+        if self.settings.compiler == "Visual Studio":
+            self.cpp_info.cxxflags.append("/Zc:preprocessor")

@@ -33,6 +33,10 @@ add_library(Cafe.ErrorHandling ${SOURCE_FILES} ${HEADERS}
 
 target_compile_features(Cafe.ErrorHandling PUBLIC cxx_std_20)
 
+if(MSVC)
+    target_compile_options(Cafe.ErrorHandling PUBLIC /Zc:preprocessor)
+endif()
+
 target_include_directories(Cafe.ErrorHandling PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
