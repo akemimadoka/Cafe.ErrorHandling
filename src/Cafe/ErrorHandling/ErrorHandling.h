@@ -7,10 +7,10 @@
 #include <string_view>
 
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
-#	ifndef CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER
-#		error Please enable CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER
-#	endif
-#	include "StackWalker.h"
+#ifndef CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER
+#error Please enable CAFE_ERROR_HANDLING_INCLUDE_STACKWALKER
+#endif
+#include "StackWalker.h"
 #endif
 
 namespace Cafe::ErrorHandling

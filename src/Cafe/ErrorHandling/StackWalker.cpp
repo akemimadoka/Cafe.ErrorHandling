@@ -3,7 +3,7 @@
 #include <Cafe/TextUtils/Misc.h>
 
 #ifdef _WIN32
-#	include <mutex>
+#include <mutex>
 #endif
 
 using namespace Cafe;
@@ -33,7 +33,7 @@ StackWalker::Capture(std::size_t captureFrames, std::size_t skipFrames,
                      Encoding::StringView<Encoding::CodePage::Utf8> unknownSymbolName,
                      Encoding::StringView<Encoding::CodePage::Utf8> unknownFileName)
 {
-#	if WINVER <= _WIN32_WINNT_WS03
+#if WINVER <= _WIN32_WINNT_WS03
 	if (captureFrames >= 63 || skipFrames >= 63 - captureFrames)
 	{
 		CAFE_THROW(CafeException, CAFE_UTF8_SV("captureFrames or skipFrames is too large for "
@@ -41,7 +41,7 @@ StackWalker::Capture(std::size_t captureFrames, std::size_t skipFrames,
 		                                       "https://msdn.microsoft.com/en-us/library/windows/"
 		                                       "desktop/bb204633(v=vs.85).aspx ."));
 	}
-#	endif
+#endif
 
 	if (skipFrames > captureFrames)
 	{

@@ -3,9 +3,9 @@
 #include <cstring>
 
 #if defined(_WIN32)
-#	include <Windows.h>
+#include <Windows.h>
 #else
-#	include <cerrno>
+#include <cerrno>
 #endif
 
 using namespace Cafe;

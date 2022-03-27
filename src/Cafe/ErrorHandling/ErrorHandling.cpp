@@ -13,15 +13,10 @@ CafeException::CafeException(Context context,
 CafeException::CafeException(
     Context context,
     std::shared_ptr<Encoding::String<Encoding::CodePage::Utf8>> description) noexcept
-    : m_Context{ std::move(context) }, m_Description
-{
-	std::move(description)
-}
+    : m_Context{ std::move(context) }, m_Description{ std::move(description) }
 #if CAFE_ERROR_HANDLING_ENABLE_STACKWALKER_IN_CAFE_EXCEPTION
-, m_CaptureResult
-{
-	std::make_shared<StackWalker::CaptureResult>(StackWalker::Capture())
-}
+      ,
+      m_CaptureResult{ std::make_shared<StackWalker::CaptureResult>(StackWalker::Capture()) }
 #endif
 {
 }
